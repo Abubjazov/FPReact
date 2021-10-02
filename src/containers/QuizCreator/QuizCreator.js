@@ -3,6 +3,7 @@ import Button from '../../components/UI/Button/Button'
 import Input from '../../components/UI/Input/Input'
 import { createControl } from '../../form/formFramework'
 import Auxiliary from '../../hoc/Auxiliary/Auxiliary'
+import Select from '../../components/UI/Select/Select'
 import './QuizCreator.css'
 
 function createOptionControl(number) {
@@ -30,6 +31,7 @@ class QuizCreator extends React.Component {
 
     state = {
         quiz: [],
+        rightAnswerId: 1,
         formControls: createFormControls()
     }
 
@@ -70,33 +72,51 @@ class QuizCreator extends React.Component {
         })
     }
 
+    selectChangeHandler = event => {
+        this.setState({
+            rightAnswerId: +event.target.value
+        })
+    }
+
     render() { 
+        const select = <Select
+            label='Выберите правильный ответ'
+            value={this.state.rightAnswerId}
+            onChange={this.selectChangeHandler}
+            options={[
+                {text: 1, value: 1},
+                {text: 2, value: 2},
+                {text: 3, value: 3},
+                {text: 4, value: 4}
+            ]}
+        />
+    
         return (
-        <div className='QuizCreator'>
-            <div>
-                <h1>Создайте свой тест</h1>
+            <div className='QuizCreator'>
+                <div>
+                    <h1>Создайте свой тест</h1>
 
-                <form onSubmit={this.submitHandler}>
-                    {this.renderControls()}
+                    <form onSubmit={this.submitHandler}>
+                        {this.renderControls()}
 
-                    <select></select>
+                        {select}
 
-                    <Button
-                        type='primary_btn'
-                        onClick={this.addQuestionHandler}
-                    >
-                        Добавить вопрос
-                    </Button>
+                        <Button
+                            type='primary_btn'
+                            onClick={this.addQuestionHandler}
+                        >
+                            Добавить вопрос
+                        </Button>
 
-                    <Button
-                        type='success_btn'
-                        onClick={this.createQuizHandler}
-                    >
-                        Сохранить тест
-                    </Button>
-                </form>
+                        <Button
+                            type='success_btn'
+                            onClick={this.createQuizHandler}
+                        >
+                            Сохранить тест
+                        </Button>
+                    </form>
+                </div>
             </div>
-        </div>
         )
     }
 }
