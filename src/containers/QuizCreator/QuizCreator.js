@@ -1,7 +1,7 @@
 import React from 'react'
 import Button from '../../components/UI/Button/Button'
 import Input from '../../components/UI/Input/Input'
-import { createControl } from '../../form/formFramework'
+import { createControl, validate, validateForm } from '../../form/formFramework'
 import Auxiliary from '../../hoc/Auxiliary/Auxiliary'
 import Select from '../../components/UI/Select/Select'
 import './QuizCreator.css'
@@ -31,14 +31,15 @@ class QuizCreator extends React.Component {
 
     state = {
         quiz: [],
+        isFormValid: false,
         rightAnswerId: 1,
         formControls: createFormControls()
     }
 
     submitHandler = event => event.preventDefault()
 
-    addQuestionHandler = () => {
-
+    addQuestionHandler = (event) => {
+        event.preventDefault()
     }
 
     createQuizHandler = () => {
@@ -46,7 +47,19 @@ class QuizCreator extends React.Component {
     }
 
     changeHandler = (value, controlName) => {
+        const formControls = {...this.state.formControls},
+              control = {...formControls[controlName]}
 
+        control.touched = true
+        control.value = value
+        control.valid = validate(control.value, control.validation)
+
+        formControls[controlName] = control
+
+        this.setState({
+            formControls,
+            isFormValid: validateForm(formControls)
+        })
     }
 
     renderControls() {
@@ -104,6 +117,7 @@ class QuizCreator extends React.Component {
                         <Button
                             type='primary_btn'
                             onClick={this.addQuestionHandler}
+                            disabled={!this.state.isFormValid}
                         >
                             Добавить вопрос
                         </Button>
@@ -111,6 +125,7 @@ class QuizCreator extends React.Component {
                         <Button
                             type='success_btn'
                             onClick={this.createQuizHandler}
+                            disabled={this.state.quiz.length === 0}
                         >
                             Сохранить тест
                         </Button>
