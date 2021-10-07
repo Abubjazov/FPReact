@@ -1,7 +1,7 @@
 import React from 'react'
 import './QuizList.css'
 import { NavLink } from 'react-router-dom'
-import { fetchQuizes } from '../../store/actions/quizAction'
+import { fetchQuizes } from '../../store/actions/quizActions'
 import Loader from '../../components/UI/Loader/Loader'
 import { connect } from 'react-redux'
 
